@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// Configuration
+var iconHours = [12, 18, 19]; // [] for no icons, null for always show
 var animationFrames = 36;
 var animationSpeed = 10; // ms
 var canvas = document.getElementById('canvas');
@@ -88,10 +90,16 @@ function updateIcon() {
     chrome.browserAction.setBadgeBackgroundColor({color:[190, 190, 190, 230]});
     chrome.browserAction.setBadgeText({text:"?"});
   } else {
+    var time = new Date();
+    var hour = time.getHours();
+    var showIcon = iconHours === null || iconHours.indexOf(hour) != -1;
+
+    var unreadCount = localStorage.unreadCount != "0" ? localStorage.unreadCount : "";
+
     chrome.browserAction.setIcon({path: "gmail_logged_in.png"});
     chrome.browserAction.setBadgeBackgroundColor({color:[208, 0, 24, 255]});
     chrome.browserAction.setBadgeText({
-      text: localStorage.unreadCount != "0" ? localStorage.unreadCount : ""
+      text: (showIcon ? unreadCount : "")
     });
   }
 }
